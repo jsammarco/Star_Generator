@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Star Rating Code Generator</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    color: #f9fafb;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 25px;
+}
+
+.card {
+    background: #fff;
+    color: #111827;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    margin-bottom: 25px;
+}
+
+h1.page-title {
+    color: #f59e0b;
+    text-align: center;
+}
+
+h2 {
+    color: #374151;
+    margin-top: 0;
+}
+
+.control {
+    margin-bottom: 20px;
+}
+
+label {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input, select, textarea {
+    box-sizing: border-box;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    padding: 9px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+}
+
+input[type="text"] {
+    width: 100%;
+}
+
+input[type="number"] {
+    width: 100px;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: #f59e0b;
+}
+
+.preview {
+    background: #f3f4f6;
+    border: 2px dashed #d1d5db;
+    border-radius: 14px;
+    padding: 25px;
+    text-align: center;
+    min-height: 80px;
+    color: #000;
+}
+
+.preview h1,
+.preview h2,
+.preview h3,
+.preview h4,
+.preview span {
+    color: #000 !important;
+    margin: 0;
+}
+
+textarea {
+    width: 100%;
+    height: 260px;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid #d1d5db;
+    font-family: Consolas, monospace;
+    background: #111827;
+    color: #f9fafb;
+}
+
+.downloads {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.download-card {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 15px;
+    text-align: center;
+}
+
+.download-card img {
+    width: 42px;
+    height: 42px;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+.download-card a {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: #f59e0b;
+    color: #111827;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.download-card a:hover {
+    background: #d97706;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 class="page-title">Star Rating Code Generator</h1>
+
+<div class="card">
+    <h2>Settings</h2>
+
+    <div class="control">
+        <label>Star Base URL Path</label>
+        <input type="text" id="baseUrl" value="https://consultingjoe.com/joey/">
+    </div>
+
+    <div class="control">
+        <label>Prepending Inline Text</label>
+        <input type="text" id="beforeText" value="">
+    </div>
+
+    <div class="control">
+        <label>Postpending Inline Text</label>
+        <input type="text" id="afterText" value="">
+    </div>
+
+    <div class="control">
+        <label>Text Heading Style</label>
+        <select id="headingTag">
+            <option value="span">Inline / No Heading</option>
+            <option value="h1">H1</option>
+            <option value="h2">H2</option>
+            <option value="h3">H3</option>
+            <option value="h4">H4</option>
+        </select>
+    </div>
+
+    <div class="control">
+        <label>
+            Rating
+            <input type="number" id="ratingNumber" value="2.5" min="0" max="10" step="0.5">
+        </label>
+        <input type="range" id="ratingSlider" value="2.5" min="0" max="10" step="0.5">
+    </div>
+
+    <div class="control">
+        <label>
+            Maximum Stars
+            <input type="number" id="maxStarsNumber" value="4" min="3" max="10">
+        </label>
+        <input type="range" id="maxStarsSlider" value="4" min="3" max="10">
+    </div>
+
+    <div class="control">
+        <label>
+            Star Size
+            <input type="number" id="sizeNumber" value="32" min="8" max="150">
+        </label>
+        <input type="range" id="sizeSlider" value="32" min="8" max="150">
+    </div>
+
+    <div class="control">
+        <label>
+            Star Spacing
+            <input type="number" id="spacingNumber" value="-5" min="-20" max="20">
+        </label>
+        <input type="range" id="spacingSlider" value="-5" min="-20" max="20">
+    </div>
+</div>
+
+<div class="card">
+    <h2>Live Preview</h2>
+    <div class="preview" id="preview"></div>
+</div>
+
+<div class="card">
+    <h2>Generated HTML Code</h2>
+    <textarea id="output" readonly></textarea>
+</div>
+
+<div class="card">
+    <h2>Download Star Images</h2>
+    <div class="downloads" id="downloads"></div>
+</div>
+
+</div>
+
+<script>
+const controls = {
+    baseUrl: document.getElementById("baseUrl"),
+    beforeText: document.getElementById("beforeText"),
+    afterText: document.getElementById("afterText"),
+    headingTag: document.getElementById("headingTag"),
+    ratingNumber: document.getElementById("ratingNumber"),
+    ratingSlider: document.getElementById("ratingSlider"),
+    maxStarsNumber: document.getElementById("maxStarsNumber"),
+    maxStarsSlider: document.getElementById("maxStarsSlider"),
+    sizeNumber: document.getElementById("sizeNumber"),
+    sizeSlider: document.getElementById("sizeSlider"),
+    spacingNumber: document.getElementById("spacingNumber"),
+    spacingSlider: document.getElementById("spacingSlider")
+};
+
+function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 86400000).toUTCString();
+    document.cookie = name + "=" + encodeURIComponent(value) + "; expires=" + expires + "; path=/";
+}
+
+function getCookie(name) {
+    const cookies = document.cookie.split("; ");
+
+    for (let cookie of cookies) {
+        const parts = cookie.split("=");
+
+        if (parts[0] === name) {
+            return decodeURIComponent(parts.slice(1).join("="));
+        }
+    }
+
+    return null;
+}
+
+function saveSettings() {
+    const settings = {};
+
+    for (let key in controls) {
+        settings[key] = controls[key].value;
+    }
+
+    setCookie("starGeneratorSettings", JSON.stringify(settings), 365);
+}
+
+function loadSettings() {
+    const saved = getCookie("starGeneratorSettings");
+
+    if (!saved) return;
+
+    try {
+        const settings = JSON.parse(saved);
+
+        for (let key in settings) {
+            if (controls[key]) {
+                controls[key].value = settings[key];
+            }
+        }
+    } catch (e) {}
+}
+
+function cleanBaseUrl(url) {
+    url = url.trim();
+
+    if (url === "") {
+        url = "https://consultingjoe.com/joey/";
+    }
+
+    if (!url.endsWith("/")) {
+        url += "/";
+    }
+
+    return url;
+}
+
+function escapeHtml(text) {
+    return text.replace(/[&<>"']/g, function(match) {
+        return {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+        }[match];
+    });
+}
+
+function preserveSpaces(text) {
+    return escapeHtml(text).replace(/ {2,}/g, function(match) {
+        return "&nbsp;".repeat(match.length);
+    });
+}
+
+function syncInputs(source, target) {
+    target.value = source.value;
+    generateCode();
+}
+
+function buildStarLines(baseUrl, rating, size, spacing, maxStars) {
+    const starLines = [];
+
+    for (let i = 1; i <= maxStars; i++) {
+        let img = "no_star.png";
+
+        if (rating >= i) {
+            img = "star.png";
+        } else if (rating >= i - 0.5) {
+            img = "half_star.png";
+        }
+
+        let style = "vertical-align:middle; margin-right:" + spacing + "px;";
+
+        starLines.push(
+            '<img src="' + baseUrl + img + '" width="' + size + '" style="' + style + '">'
+        );
+    }
+
+    return starLines;
+}
+
+function buildGeneratedHtml(baseUrl, beforeText, afterText, tag, rating, size, spacing, maxStars) {
+    const starLines = buildStarLines(baseUrl, rating, size, spacing, maxStars);
+    const lines = [];
+
+    if (beforeText !== "") {
+        lines.push(beforeText);
+    }
+
+    for (let i = 0; i < starLines.length; i++) {
+        lines.push(starLines[i]);
+    }
+
+    if (afterText !== "") {
+        lines.push(afterText);
+    }
+
+    if (tag === "span") {
+        return lines.join("\n");
+    }
+
+    return "<" + tag + ">\n" + lines.join("\n") + "\n</" + tag + ">";
+}
+
+function buildDownloads(baseUrl) {
+    document.getElementById("downloads").innerHTML = `
+        <div class="download-card">
+            <img src="${baseUrl}star.png" alt="Full Star">
+            <a href="${baseUrl}star.png" download>Download Full Star</a>
+        </div>
+
+        <div class="download-card">
+            <img src="${baseUrl}half_star.png" alt="Half Star">
+            <a href="${baseUrl}half_star.png" download>Download Half Star</a>
+        </div>
+
+        <div class="download-card">
+            <img src="${baseUrl}no_star.png" alt="Empty Star">
+            <a href="${baseUrl}no_star.png" download>Download Empty Star</a>
+        </div>
+    `;
+}
+
+function generateCode() {
+    const baseUrl = cleanBaseUrl(controls.baseUrl.value);
+    const beforeText = preserveSpaces(controls.beforeText.value);
+    const afterText = preserveSpaces(controls.afterText.value);
+    const tag = controls.headingTag.value;
+
+    let maxStars = parseInt(controls.maxStarsNumber.value);
+    maxStars = Math.max(3, Math.min(10, maxStars || 4));
+
+    let rating = parseFloat(controls.ratingNumber.value);
+    let size = parseInt(controls.sizeNumber.value);
+    let spacing = parseInt(controls.spacingNumber.value);
+
+    rating = Math.max(0, Math.min(maxStars, rating || 0));
+    size = Math.max(8, Math.min(150, size || 32));
+    spacing = Math.max(-20, Math.min(20, spacing || 0));
+
+    controls.ratingNumber.max = maxStars;
+    controls.ratingSlider.max = maxStars;
+
+    controls.ratingNumber.value = rating;
+    controls.ratingSlider.value = rating;
+    controls.maxStarsNumber.value = maxStars;
+    controls.maxStarsSlider.value = maxStars;
+    controls.sizeNumber.value = size;
+    controls.sizeSlider.value = size;
+    controls.spacingNumber.value = spacing;
+    controls.spacingSlider.value = spacing;
+
+    const html = buildGeneratedHtml(
+        baseUrl,
+        beforeText,
+        afterText,
+        tag,
+        rating,
+        size,
+        spacing,
+        maxStars
+    );
+
+    document.getElementById("preview").innerHTML = html;
+    document.getElementById("output").value = html;
+
+    buildDownloads(baseUrl);
+    saveSettings();
+}
+
+controls.ratingNumber.addEventListener("input", () => syncInputs(controls.ratingNumber, controls.ratingSlider));
+controls.ratingSlider.addEventListener("input", () => syncInputs(controls.ratingSlider, controls.ratingNumber));
+
+controls.maxStarsNumber.addEventListener("input", () => syncInputs(controls.maxStarsNumber, controls.maxStarsSlider));
+controls.maxStarsSlider.addEventListener("input", () => syncInputs(controls.maxStarsSlider, controls.maxStarsNumber));
+
+controls.sizeNumber.addEventListener("input", () => syncInputs(controls.sizeNumber, controls.sizeSlider));
+controls.sizeSlider.addEventListener("input", () => syncInputs(controls.sizeSlider, controls.sizeNumber));
+
+controls.spacingNumber.addEventListener("input", () => syncInputs(controls.spacingNumber, controls.spacingSlider));
+controls.spacingSlider.addEventListener("input", () => syncInputs(controls.spacingSlider, controls.spacingNumber));
+
+[
+    controls.baseUrl,
+    controls.beforeText,
+    controls.afterText,
+    controls.headingTag
+].forEach(function(input) {
+    input.addEventListener("input", generateCode);
+    input.addEventListener("change", generateCode);
+});
+
+loadSettings();
+generateCode();
+</script>
+
+</body>
+</html>
