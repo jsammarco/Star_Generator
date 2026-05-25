@@ -14,8 +14,8 @@ body {
 
 .container {
     max-width: 1000px;
-    margin: 40px auto;
-    padding: 25px;
+    margin: 10px auto;
+    padding: 5px;
 }
 
 .card {
@@ -37,8 +37,24 @@ h2 {
     margin-top: 0;
 }
 
+.settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+@media (max-width: 800px) {
+    .settings-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .control {
-    margin-bottom: 20px;
+    margin-bottom: 0;
+}
+
+.full-width {
+    grid-column: 1 / -1;
 }
 
 label {
@@ -149,62 +165,90 @@ textarea {
 <div class="card">
     <h2>Settings</h2>
 
-    <div class="control">
-        <label>Star Base URL Path</label>
-        <input type="text" id="baseUrl" value="https://consultingjoe.com/joey/">
-    </div>
+    <div class="settings-grid">
 
-    <div class="control">
-        <label>Prepending Inline Text</label>
-        <input type="text" id="beforeText" value="">
-    </div>
+        <div class="control full-width">
+            <label>Star Base URL Path</label>
+            <input type="text" id="baseUrl" value="https://consultingjoe.com/stargen/">
+        </div>
 
-    <div class="control">
-        <label>Postpending Inline Text</label>
-        <input type="text" id="afterText" value="">
-    </div>
+        <div class="control">
+            <label>Prepending Inline Text</label>
+            <input type="text" id="beforeText" value="">
+        </div>
 
-    <div class="control">
-        <label>Text Heading Style</label>
-        <select id="headingTag">
-            <option value="span">Inline / No Heading</option>
-            <option value="h1">H1</option>
-            <option value="h2">H2</option>
-            <option value="h3">H3</option>
-            <option value="h4">H4</option>
-        </select>
-    </div>
+        <div class="control">
+            <label>Postpending Inline Text</label>
+            <input type="text" id="afterText" value="">
+        </div>
 
-    <div class="control">
-        <label>
-            Rating
-            <input type="number" id="ratingNumber" value="2.5" min="0" max="10" step="0.5">
-        </label>
-        <input type="range" id="ratingSlider" value="2.5" min="0" max="10" step="0.5">
-    </div>
+        <div class="control">
+            <label>Text Heading Style</label>
+            <select id="headingTag">
+                <option value="span">Inline / No Heading</option>
+                <option value="h1">H1</option>
+                <option value="h2">H2</option>
+                <option value="h3">H3</option>
+                <option value="h4">H4</option>
+            </select>
+        </div>
 
-    <div class="control">
-        <label>
-            Maximum Stars
-            <input type="number" id="maxStarsNumber" value="4" min="3" max="10">
-        </label>
-        <input type="range" id="maxStarsSlider" value="4" min="3" max="10">
-    </div>
+        <div class="control">
+            <label>
+                Rating
+                <input type="number" id="ratingNumber" value="2.5" min="0" max="10" step="0.5">
+            </label>
+            <input type="range" id="ratingSlider" value="2.5" min="0" max="10" step="0.5">
+        </div>
 
-    <div class="control">
-        <label>
-            Star Size
-            <input type="number" id="sizeNumber" value="32" min="8" max="150">
-        </label>
-        <input type="range" id="sizeSlider" value="32" min="8" max="150">
-    </div>
+        <div class="control">
+            <label>
+                Maximum Stars
+                <input type="number" id="maxStarsNumber" value="4" min="3" max="10">
+            </label>
+            <input type="range" id="maxStarsSlider" value="4" min="3" max="10">
+        </div>
 
-    <div class="control">
-        <label>
-            Star Spacing
-            <input type="number" id="spacingNumber" value="-5" min="-20" max="20">
-        </label>
-        <input type="range" id="spacingSlider" value="-5" min="-20" max="20">
+        <div class="control">
+            <label>
+                Star Size
+                <input type="number" id="sizeNumber" value="32" min="8" max="150">
+            </label>
+            <input type="range" id="sizeSlider" value="32" min="8" max="150">
+        </div>
+
+        <div class="control">
+            <label>
+                Star Spacing
+                <input type="number" id="spacingNumber" value="-5" min="-20" max="20">
+            </label>
+            <input type="range" id="spacingSlider" value="-5" min="-20" max="20">
+        </div>
+
+        <div class="control">
+            <label>
+                Vertical Alignment
+                <input type="number" id="verticalNumber" value="-4" min="-50" max="50">
+            </label>
+            <input type="range" id="verticalSlider" value="-4" min="-50" max="50">
+        </div>
+
+        <div class="control">
+            <label>
+                Left Padding
+                <input type="number" id="leftPaddingNumber" value="0" min="0" max="100">
+            </label>
+            <input type="range" id="leftPaddingSlider" value="0" min="0" max="100">
+        </div>
+
+        <div class="control">
+            <label>
+                Right Padding
+                <input type="number" id="rightPaddingNumber" value="0" min="0" max="100">
+            </label>
+            <input type="range" id="rightPaddingSlider" value="0" min="0" max="100">
+        </div>
+
     </div>
 </div>
 
@@ -231,14 +275,27 @@ const controls = {
     beforeText: document.getElementById("beforeText"),
     afterText: document.getElementById("afterText"),
     headingTag: document.getElementById("headingTag"),
+
     ratingNumber: document.getElementById("ratingNumber"),
     ratingSlider: document.getElementById("ratingSlider"),
+
     maxStarsNumber: document.getElementById("maxStarsNumber"),
     maxStarsSlider: document.getElementById("maxStarsSlider"),
+
     sizeNumber: document.getElementById("sizeNumber"),
     sizeSlider: document.getElementById("sizeSlider"),
+
     spacingNumber: document.getElementById("spacingNumber"),
-    spacingSlider: document.getElementById("spacingSlider")
+    spacingSlider: document.getElementById("spacingSlider"),
+
+    verticalNumber: document.getElementById("verticalNumber"),
+    verticalSlider: document.getElementById("verticalSlider"),
+
+    leftPaddingNumber: document.getElementById("leftPaddingNumber"),
+    leftPaddingSlider: document.getElementById("leftPaddingSlider"),
+
+    rightPaddingNumber: document.getElementById("rightPaddingNumber"),
+    rightPaddingSlider: document.getElementById("rightPaddingSlider")
 };
 
 function setCookie(name, value, days) {
@@ -290,7 +347,7 @@ function cleanBaseUrl(url) {
     url = url.trim();
 
     if (url === "") {
-        url = "https://consultingjoe.com/joey/";
+        url = "https://consultingjoe.com/stargen/";
     }
 
     if (!url.endsWith("/")) {
@@ -323,7 +380,7 @@ function syncInputs(source, target) {
     generateCode();
 }
 
-function buildStarLines(baseUrl, rating, size, spacing, maxStars) {
+function buildStarLines(baseUrl, rating, size, spacing, vertical, maxStars) {
     const starLines = [];
 
     for (let i = 1; i <= maxStars; i++) {
@@ -335,7 +392,9 @@ function buildStarLines(baseUrl, rating, size, spacing, maxStars) {
             img = "half_star.png";
         }
 
-        let style = "vertical-align:middle; margin-right:" + spacing + "px;";
+        let style =
+            "vertical-align:" + vertical + "px; " +
+            "margin-right:" + spacing + "px;";
 
         starLines.push(
             '<img src="' + baseUrl + img + '" width="' + size + '" style="' + style + '">'
@@ -345,17 +404,31 @@ function buildStarLines(baseUrl, rating, size, spacing, maxStars) {
     return starLines;
 }
 
-function buildGeneratedHtml(baseUrl, beforeText, afterText, tag, rating, size, spacing, maxStars) {
-    const starLines = buildStarLines(baseUrl, rating, size, spacing, maxStars);
+function buildGeneratedHtml(baseUrl, beforeText, afterText, tag, rating, size, spacing, vertical, leftPadding, rightPadding, maxStars) {
+    const starLines = buildStarLines(
+        baseUrl,
+        rating,
+        size,
+        spacing,
+        vertical,
+        maxStars
+    );
+
     const lines = [];
 
     if (beforeText !== "") {
         lines.push(beforeText);
     }
 
+    lines.push(
+        '<span style="padding-left:' + leftPadding + 'px; padding-right:' + rightPadding + 'px;">'
+    );
+
     for (let i = 0; i < starLines.length; i++) {
         lines.push(starLines[i]);
     }
+
+    lines.push("</span>");
 
     if (afterText !== "") {
         lines.push(afterText);
@@ -399,22 +472,40 @@ function generateCode() {
     let rating = parseFloat(controls.ratingNumber.value);
     let size = parseInt(controls.sizeNumber.value);
     let spacing = parseInt(controls.spacingNumber.value);
+    let vertical = parseInt(controls.verticalNumber.value);
+    let leftPadding = parseInt(controls.leftPaddingNumber.value);
+    let rightPadding = parseInt(controls.rightPaddingNumber.value);
 
     rating = Math.max(0, Math.min(maxStars, rating || 0));
     size = Math.max(8, Math.min(150, size || 32));
     spacing = Math.max(-20, Math.min(20, spacing || 0));
+    vertical = Math.max(-50, Math.min(50, vertical || 0));
+    leftPadding = Math.max(0, Math.min(100, leftPadding || 0));
+    rightPadding = Math.max(0, Math.min(100, rightPadding || 0));
 
     controls.ratingNumber.max = maxStars;
     controls.ratingSlider.max = maxStars;
 
     controls.ratingNumber.value = rating;
     controls.ratingSlider.value = rating;
+
     controls.maxStarsNumber.value = maxStars;
     controls.maxStarsSlider.value = maxStars;
+
     controls.sizeNumber.value = size;
     controls.sizeSlider.value = size;
+
     controls.spacingNumber.value = spacing;
     controls.spacingSlider.value = spacing;
+
+    controls.verticalNumber.value = vertical;
+    controls.verticalSlider.value = vertical;
+
+    controls.leftPaddingNumber.value = leftPadding;
+    controls.leftPaddingSlider.value = leftPadding;
+
+    controls.rightPaddingNumber.value = rightPadding;
+    controls.rightPaddingSlider.value = rightPadding;
 
     const html = buildGeneratedHtml(
         baseUrl,
@@ -424,6 +515,9 @@ function generateCode() {
         rating,
         size,
         spacing,
+        vertical,
+        leftPadding,
+        rightPadding,
         maxStars
     );
 
@@ -445,6 +539,15 @@ controls.sizeSlider.addEventListener("input", () => syncInputs(controls.sizeSlid
 
 controls.spacingNumber.addEventListener("input", () => syncInputs(controls.spacingNumber, controls.spacingSlider));
 controls.spacingSlider.addEventListener("input", () => syncInputs(controls.spacingSlider, controls.spacingNumber));
+
+controls.verticalNumber.addEventListener("input", () => syncInputs(controls.verticalNumber, controls.verticalSlider));
+controls.verticalSlider.addEventListener("input", () => syncInputs(controls.verticalSlider, controls.verticalNumber));
+
+controls.leftPaddingNumber.addEventListener("input", () => syncInputs(controls.leftPaddingNumber, controls.leftPaddingSlider));
+controls.leftPaddingSlider.addEventListener("input", () => syncInputs(controls.leftPaddingSlider, controls.leftPaddingNumber));
+
+controls.rightPaddingNumber.addEventListener("input", () => syncInputs(controls.rightPaddingNumber, controls.rightPaddingSlider));
+controls.rightPaddingSlider.addEventListener("input", () => syncInputs(controls.rightPaddingSlider, controls.rightPaddingNumber));
 
 [
     controls.baseUrl,
