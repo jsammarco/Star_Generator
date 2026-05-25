@@ -74,4 +74,8 @@ It then wraps the output in the selected heading tag, or leaves it inline when `
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE).
+This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE).
+
+## Notice
+
+This repository also includes a `NOTICE` file for attribution and project-origin information distributed alongside the Apache 2.0 license.
